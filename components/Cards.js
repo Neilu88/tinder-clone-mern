@@ -1,21 +1,21 @@
 import { SwipeDown } from "@mui/icons-material"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import TinderCard from "react-tinder-card"
+import axios from "./axios"
 
 const Cards = () => {
-  const [people, setPeople] = useState([
-    {
-      name: "Elon Musk",
-      url: "https://ichef.bbci.co.uk/images/ic/640x360/p03c84wz.jpg",
-    },
-    {
-      name: "Jeff Bezos",
-      url: "https://www.theladders.com/wp-content/uploads/jeff-bezos-ceo-profile.jpg",
-    },
-  ])
+  const [people, setPeople] = useState([])
+  useEffect(() => {
+    async function fetchData() {
+      const req = await axios.get("/tinder/card")
 
-  const swiped = (direction, nameToDelete) => {
-    console.log("removing: " + nametoDelete)
+      setPeople(req.data)
+    }
+    fetchData()
+  }, [])
+
+  const swiped = (direction) => {
+    console.log("removing")
     //setLastDirection(direction)
   }
 
@@ -36,7 +36,7 @@ const Cards = () => {
           >
             <div
               className="relative rounded-2xl bg-cover bg-white w-[600px] p-5 max-w-[85vh] h-[50vh] !shadow-2xl bg-center"
-              style={{ backgroundImage: `url(${person.url})` }}
+              style={{ backgroundImage: `url(${person.imgUrl})` }}
             >
               <h3 className="font-semibold absolute bottom-0 m-2.5 text-white">
                 {person.name}
